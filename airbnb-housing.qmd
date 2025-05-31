@@ -1,0 +1,946 @@
+---
+bibliography: reference_0013.bib
+csl: harvard-cite-them-right.csl
+title: NA_Group1's Group Project
+execute:
+  echo: false
+  freeze: true
+format:
+  html:
+    code-copy: true
+    code-link: true
+    toc: true
+    toc-title: On this page
+    toc-depth: 2
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+  pdf:
+    include-in-header:
+      text: |
+        \addtokomafont{disposition}{\rmfamily}
+    mainfont: Spectral
+    sansfont: Roboto Flex
+    monofont: Roboto Mono
+    papersize: a4
+    geometry:
+      - top=25mm
+      - left=40mm
+      - right=30mm
+      - bottom=25mm
+      - heightrounded
+    toc: false
+    number-sections: false
+    colorlinks: true
+    highlight-style: github
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .qmd
+      format_name: quarto
+      format_version: '1.0'
+      jupytext_version: 1.16.4
+  kernelspec:
+    display_name: Python (base)
+    language: python
+    name: base
+---
+
+```{python}
+#| echo: false
+# Standard library imports
+import os
+import io 
+import gzip
+import requests as rq  # Used for downloading data
+from io import BytesIO  # For handling in-memory file-like objects
+
+# Third-party imports
+import pandas as pd
+import geopandas as gpd
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+from matplotlib.patches import Patch
+import matplotlib.ticker as ticker
+import seaborn as sns
+import scipy.stats as stats
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
+from tabulate import tabulate
+
+# Statsmodels imports
+import statsmodels.api as sm
+from statsmodels.tools.tools import add_constant
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+from statsmodels.stats.diagnostic import het_breuschpagan
+from statsmodels.stats.stattools import durbin_watson
+
+# Spatial analysis imports
+from libpysal.weights import Queen
+from esda.moran import Moran
+
+# External dependency installation
+!pip install -q kagglehub
+import kagglehub
+```
+
+```{python}
+# Load the dataset for Inside Airbnb updated September 2024
+url = "https://data.insideairbnb.com/united-kingdom/england/london/2024-09-06/data/listings.csv.gz"
+
+# URL of the GitHub file, scrape from the GLA's Housing Research Note 4
+url1 = "https://github.com/chenyiting1003/NA_GROUP1/raw/refs/heads/main/airbnb_borough_data_2019.csv"
+
+# geojson dataset
+url2 = "https://data.insideairbnb.com/united-kingdom/england/london/2024-09-06/visualisations/neighbourhoods.geojson"
+
+url3 = "https://github.com/chenyiting1003/NA_GROUP1/raw/refs/heads/main/datadownload_local_rent.xlsx"
+
+
+#csl
+#| eval: true
+url5 = "https://github.com/chenyiting1003/NA_GROUP1/raw/refs/heads/main/harvard-cite-them-right.csl"
+url6 = "https://github.com/chenyiting1003/NA_GROUP1/raw/refs/heads/main/reference_0013.bib"
+
+local_filename1 = "harvard-cite-them-right.csl"
+local_filename2 = "reference_0013.bib"
+
+# 下载文件函数
+def download_file(url, local_filename):
+    response = rq.get(url)
+    if response.status_code == 200:
+        with open(local_filename, 'wb') as file:
+            file.write(response.content)
+
+# 执行下载
+download_file(url5, local_filename1)
+download_file(url6, local_filename2)
+```
+
+## Declaration of Authorship {.unnumbered .unlisted}
+We, \[NA_GROUP1\], pledge our honour that the work presented in this assessment is our own. Where information has been derived from other sources, we confirm that this has been indicated in the work. Where a Large Language Model such as ChatGPT has been used we confirm that we have made its contribution to the final submission clear.
+Date:16/12/2024
+Student Numbers:24048055,24143995,24038681,24130339,24050260
+
+
+## Brief Group Reflection
+|    What Went Well   |         What Was Challenging           |
+|---------------------|----------------------------------------|
+|  teammates          |   output to pdf                        |
+|  data clean         |   analysis data to prove our opinions  |
+|  useful references  |   explain our discovery in limit word  |
+
+
+## Priorities for Feedback
+During our group project, we found it challenging to effectively connect the data we analyzed with the points we raised while reading the papers. 
+Although we learned how to perform data analysis and coding exercises in class, and how to read academic papers and form our own insights, combining these two aspects has proven to be difficult. 
+Another issue we faced is that the existing data has many gaps compared to the data we need for our research, such as timeliness issues. We are unsure how to address or substitute for these gaps at the moment.
+Additionally, answering questions concisely requires practice, which was an area we lacked during the semester.
+
+On the positive side, we learned how to communicate our ideas to the public using simpler, non-academic language. 
+{{< pagebreak >}}
+
+
+# Response to Questions
+
+## 1. Who collected the InsideAirbnb data?
+
+The data is sourced from publicly available information on the Airbnb website and is analyzed, cleaned, and aggregated for public discussion [@inside_airbnb_about]. Key contributors include the founder and collaborators who developed tools to enhance data transparency, such as automating search functionality and stabilizing the platform’s code [@inside_airbnb_about; @alsudais_incorrect_2021].
+
+
+## 2. Why did they collect the InsideAirbnb data?
+
+Inside Airbnb collects data to enhance transparency by addressing incomplete and biased reports[@inside_airbnb_platform_failures;@alsudais_incorrect_2021]. Studies show that short-term rentals disrupt communities, drive gentrification, and exacerbate housing inequities in cities like New York, London, and Nanjing [@jiao_cities_2020;@wachsmuth_airbnb_2018; @sun_characteristics_2021].
+To promote housing equity, Inside Airbnb focuses on:
+Increasing Transparency: Highlight the effects of short-term rentals on housing availability and affordability [@airbtics_inside_airbnb_guide; @garcia_urban_2018].
+Supporting Policy Development: Provide actionable data to regulate short-term rentals and tackle urban challenges [@uk_government_consultation_2023; @jiao_cities_2020].
+
+
+## 3. How was the InsideAirbnb data collected?
+
+Inside Airbnb relies on publicly accessible data to analyze the platform’s impact on housing and communities.
+Using web scraping, it extracts and aggregates information such as listings, prices, calendars, reviews, and host details from Airbnb’s website, which is then cleaned and prepared for public discussions and policymaking[@inside_airbnb_about]. Meanwhile, Airbnb processes proprietary user interaction data through its User Signals Platform (USP), employing real-time analytics to support applications like personalization and market segmentation[@jiao_cities_2020].
+
+
+## 4. How does the method of collection impact the completeness and/or accuracy of the InsideAirbnb data set's representation of the process it seeks to study, and what wider issues does this raise?
+
+**Impact on Data Completeness and Accuracy**
+
+Inside Airbnb data is gathered through web scraping. It may exclude some listings due to technical or legal barriers, such as anti-scraping technologies deployed by Airbnb[@airbnb_automated_hosting_2024]. In addition, data collection is done at intervals, which means dynamic changes such as new or deleted lists can be missed[@gurran_when_2017].And the data collection method may underrate the number of listings. This factor contribute to data gaps, potentially overlooking numerous active listings and limiting the accuracy of analyses[@adamiak_airbnb_2019].
+
+**Limitations in Timeliness and Geographic Representation in Reflecting Airbnb Data**
+
+InsideAirbnb's data collection method relies on periodic snapshots, with updates occurring every few months. This frequency means it may miss real-time changes, such as new or removed listings, limiting its ability to capture the dynamic nature of Airbnb’s platform[@gurran_when_2017]. Additionally, although InsideAirbnb gathers data from cities in dozens of countries, it does not cover all Airbnb regions, which restricts its ability to fully represent the broader market. This affects the accuracy of its representation of Airbnb's operations across different geographical areas[@inside_airbnb_platform_failures].
+
+**Wider issues**
+
+On one hand, the possibility that research using this dataset could unintentionally reinforce biases in the representation of the Airbnb market, leading to skewed conclusions about the platform’s impact[@adamiak_airbnb_2019]. Additionally, such research might focus on easily accessible data, like listing distribution and pricing, while overlooking more complex phenomena, such as user behavior or platform strategies[@bivens_airbnb_regulations_2021].On the other hand, scraping data without explicit consent from hosts or Airbnb itself could raise ethical concerns, especially when dealing with sensitive information like earnings or availability[@floridi_what_2016].
+
+
+## 5. What ethical considerations does the use of the InsideAirbnb data raise?
+
+Firstly, the Inside Airbnb is supposed to protect the privacy of the hosts. While Inside Airbnb asserts that it avoids using personal information and processes data carefully [@inside_airbnb_data_assumptions], the raw data scraped from Airbnb’s website often includes host names, housing locations, and other sensitive information. Even when locations are obfuscated, the inclusion of identifiable data challenges the hosts’ right to privacy. 
+
+Compared with privacy rights, the right to know how the hosts’ information is being used is well protected by Airbnb and Inside Airbnb. As the privacy policies of Airbnb [@airbnb_privacy_policy_2024]maintained, the types of personal information they collected are clearly shown on the website. The process and targets of using these data are also informed and legally guaranteed. Once these policies are changed greatly, they will connect the hosts. Hosts also enter into contracts with Airbnb, consenting to the use of their information. However, a key concern is whether hosts fully comprehend these contractual terms[@airbnb_terms_2024]. 
+
+Finally, the legality of the use of Inside Airbnb data is doubtful. Inside Airbnb made use of the skill of web scraping to get the data from Airbnb instead of getting an API from the platform, which is explicitly forbidden by the terms of service from Airbnb[@airbnb_terms_2024]. Moreover, this data acquisition process broke the laws of many regions around the world such as General Data Protection Regulation (GDPA) of Europe and the Privacy Act of Australia [@intersoft_gdpr_2018;@australia_privacy_act_1988]. Although Airbnb has got permissions from the hosts to deal with the sensitive data, Inside Airbnb did not carry out this procedure. 
+
+With regard to the indirect ethical influence of using data from Inside Airbnb, the problems of discrimination and inequality can be caused.For instance, according to @wachsmuth_airbnb_2018, certain communities may be over-labeled after the analysis through Inside Airbnb data, especially those exist gentrification phenomenon. At the meantime, as @horn_home_2017 mentioned, Inside Airbnb has a high coverage of popular cities or areas. However, there are insufficient listings for those remote regions and markets that are lack of popularity.
+
+## 6. With reference to the InsideAirbnb data (*i.e.* using numbers, figures, maps, and descriptive statistics), what does an analysis of Hosts and Listing types suggest about the nature of Airbnb lets in London?
+
+```{python}
+# 1. Define the URL of the file
+url = "https://data.insideairbnb.com/united-kingdom/england/london/2024-09-06/data/listings.csv.gz"
+
+# 2. Download the file
+response = rq.get(url)
+
+# 3. Read the compressed file
+with gzip.GzipFile(fileobj=io.BytesIO(response.content)) as gz:
+    listings = pd.read_csv(gz)
+```
+
+```{python}
+# Ensure the uniqueness of host_id
+unique_hosts = listings[['host_id', 'host_total_listings_count', 'room_type']].drop_duplicates()
+
+# Create grouping ranges
+bins = [0, 1, 2, 3, 10, 50, 100, 200, float('inf')]
+labels = ['1', '2', '3', '4 to 10', '11 to 50', '51 to 100', '101 to 200', '200 or more']
+unique_hosts['host_group'] = pd.cut(unique_hosts['host_total_listings_count'], bins=bins, labels=labels)
+
+# Calculate the number and percentage of hosts (based on unique hosts)
+grouped = unique_hosts.groupby('host_group', observed=False)
+summary = grouped.size().reset_index(name='Number of Hosts')
+summary['% of Hosts'] = (summary['Number of Hosts'] / summary['Number of Hosts'].sum() * 100).round(2)
+
+# Calculate the room type percentage (based on unique hosts)
+room_type_counts = grouped['room_type'].value_counts(normalize=True).unstack(fill_value=0) * 100
+room_type_counts = room_type_counts.round(2)  # Retain two decimal places
+
+# Ensure only 3 columns for room types
+room_type_counts = room_type_counts[['Entire home/apt', 'Private room', 'Shared room']]
+
+# Merge the results
+result = summary.merge(room_type_counts, left_on='host_group', right_index=True, how='left')
+
+# Rename columns to match the table format
+result.columns = ['No. listings linked to host ID', 'Number of Hosts', '% of Hosts',
+                  '% Entire home/apt', '% Private room', '% Shared room']
+```
+
+```{python}
+# Original data (excluding the TOTAL row)
+data = {
+    "No. listings linked to host ID": ["1", "2", "3", "4 to 10", "11 to 50", "51 to 100", "101 to 200", "200 or more"],
+    "Number of Hosts": [29616, 13236, 6177, 8820, 2298, 264, 88, 66],
+    "% of Hosts": [48.90, 21.85, 10.20, 14.56, 3.79, 0.44, 0.15, 0.11],
+    "% Entire home/apt": [62.34, 56.51, 55.76, 58.13, 68.89, 74.62, 73.86, 69.70],
+    "% Private room": [37.14, 42.91, 43.53, 41.00, 29.98, 22.35, 25.00, 24.24],
+    "% Shared room": [0.50, 0.57, 0.65, 0.62, 0.91, 0.76, 1.14, 3.03],
+}
+
+# Create DataFrame
+df = pd.DataFrame(data)
+
+# Calculate the TOTAL row and round to two decimal places
+total_row = {
+    "No. listings linked to host ID": "TOTAL",
+    "Number of Hosts": df["Number of Hosts"].sum(),
+    "% of Hosts": 100.00,
+    "% Entire home/apt": "/",
+    "% Private room": "/",
+    "% Shared room": "/",
+}
+
+# Add the TOTAL row
+df = pd.concat([df, pd.DataFrame([total_row])], ignore_index=True)
+
+# Round all decimal columns to two decimal places
+decimal_columns = ["% of Hosts", "% Entire home/apt", "% Private room", "% Shared room"]
+df[decimal_columns] = df[decimal_columns].round(2)
+
+# Create the plot
+fig, ax = plt.subplots(figsize=(15, 5))  # Set chart size
+ax.axis('tight')
+ax.axis('off')
+
+# Create the table
+table = ax.table(
+    cellText=df.values,
+    colLabels=df.columns,
+    cellLoc='center',
+    loc='center'
+)
+
+fig.suptitle("Table 1: Number of hosts with one or more active Airbnb listings, \n distribution of host percentages, and listing types managed by hosts",
+             fontsize=14, fontweight='bold', y=1)
+
+# Set table styles
+table.auto_set_font_size(False)
+table.set_fontsize(10)
+
+# Adjust column widths and row heights
+row_height = 0.1  # Height for each row
+first_col_width = 0.3  # Width of the first column
+other_col_width = 0.15  # Width of other columns
+
+# Iterate over each cell to set width, height, and styles
+for (row, col), cell in table.get_celld().items():
+    cell.set_edgecolor('black')  # Set border color
+    cell.set_linewidth(0.8)  # Border width
+
+    # Set header row styles
+    if row == 0:  # Header row
+        cell.set_facecolor("#D9D9D9")  # Gray background
+        cell.set_text_props(fontweight='bold')  # Bold font
+        row_height = 0.15
+    # Set TOTAL row styles
+    elif row == len(df):  # TOTAL row
+        cell.set_facecolor("#D9D9D9")  # Gray background
+        cell.set_text_props(fontweight='bold')  # Bold font
+    # Set second row styles
+    elif row == 1:  # Second row
+        cell.set_facecolor("#D9EAF7")  # Light blue background
+
+    # Set column widths
+    if col == 0:  # First column
+        cell.set_width(first_col_width)
+    else:
+        cell.set_width(other_col_width)
+    # Set row height
+    cell.set_height(row_height)
+
+# Display the table
+plt.show()
+```
+
+The data reveals that 48.9% of hosts are non-professional, typically individual homeowners renting out spare rooms or properties part-time. In contrast, professional hosts, who manage multiple listings, control a significant share, highlighting Airbnb's important for commercial property management[@li_pros_2016;@kwok_pricing_2019].
+Entire home/apartment listings dominate the market, especially among professional hosts, where their share continues to grow. Meanwhile, shared rooms account for a minimal portion, reflecting the market’s clear preference for private and independent spaces.
+
+```{python}
+# URL of the GitHub file, scrape from the GLA's Housing Research Note 4
+url1 = "https://github.com/chenyiting1003/NA_GROUP1/raw/refs/heads/main/airbnb_borough_data_2019.csv"
+
+# Read the CSV file into a DataFrame
+airbnb_2019 = pd.read_csv(url1)
+```
+
+```{python}
+# Group the listings data by neighbourhood_cleansed and room_type
+listings_grouped = listings.groupby(['neighbourhood_cleansed', 'room_type']).size().unstack(fill_value=0).reset_index()
+
+# Dynamically handle column names
+listings_grouped.columns = ['Borough'] + listings_grouped.columns[1:].tolist()
+
+# Standardize Borough names to lowercase for merging with airbnb_2019
+listings_grouped['Borough'] = listings_grouped['Borough'].str.lower()
+airbnb_2019['Borough'] = airbnb_2019['Borough'].str.lower()
+
+# Merge the two DataFrames
+combined_data = pd.merge(
+    airbnb_2019,
+    listings_grouped,
+    on='Borough',
+    how='outer',
+    suffixes=('_2019', '_2024')  # Add suffixes to avoid column name conflicts
+)
+
+# Fill missing values with 0
+combined_data.fillna(0, inplace=True)
+
+# Drop the "Total" and "Hotel room" columns (if they exist)
+columns_to_drop = ['Total', 'Hotel room']
+cleaned_data = combined_data.drop(columns=[col for col in columns_to_drop if col in combined_data.columns])
+```
+
+```{python}
+# Replace specific names in the Borough column
+cleaned_data['Borough'] = cleaned_data['Borough'].replace({
+    'hammersmith and fulham': 'H&F',
+    'kensington and chelsea': 'K&C',
+    'barking and dagenham': 'B&D'
+}, regex=False)
+```
+
+```{python}
+# Define a 7x8 layout of geographical regions
+borough_layout = [
+    [None, None, None, None, "Enfield", None, None, None],
+    [None, None, None, "Harrow", "Barnet", "Haringey", "Waltham Forest", None],
+    ["Hillingdon", "Ealing", "Brent", "Camden", "Islington", "Hackney", "Redbridge", "Havering"],
+    ["Hounslow", "H&F", "K&C", "Westminster", "City", "Tower Hamlets", "Newham", "B&D"],
+    [None, "Kingston", "Wandsworth", "Lambeth", "Southwark", "Lewisham", "Greenwich", "Bexley"],
+    [None, None, "Richmond", "Merton", "Croydon", "Bromley", None, None],
+    [None, None, None, "Sutton", None, None, None, None],
+]
+
+# Set a unified maximum Y-axis range to 12000
+y_max = 12000
+
+# Assign colors to room types
+color_mapping = {
+    'Entire home/apt': "#4472C4",  # Blue
+    'Private room': "#EDC586",  # Yellow
+    'Shared room': "#E86C74",  # Red
+}
+
+# Create a 7x8 canvas with subplots (adjust spacing for compactness)
+fig, axes = plt.subplots(nrows=7, ncols=8, figsize=(16, 12), gridspec_kw={'wspace': 0.1, 'hspace': 0.4})
+
+# Iterate through the layout and populate subplots
+for i, row in enumerate(borough_layout):
+    for j, borough in enumerate(row):
+        ax = axes[i, j]
+        
+        if borough is None:  # Turn off subplot if there is no borough
+            ax.axis("off")
+            continue
+        
+        # Set the background color of the subplot to light gray
+        ax.set_facecolor("#F2F2F2")
+        
+        # Remove subplot borders
+        for spine in ax.spines.values():
+            spine.set_visible(False)
+        
+        # Extract data for the current region
+        subset = cleaned_data[cleaned_data['Borough'].str.contains(borough, case=False)]
+        
+        # Prepare data for plotting
+        years = [2019, 2024]  # Years
+        room_types = ['Entire home/apt', 'Private room', 'Shared room']  # Room types
+        data = {
+            room: [subset[f"{room}_2019"].sum(), subset[f"{room}_2024"].sum()] 
+            for room in room_types
+        }
+
+        # Create a stacked area chart
+        bottom = [0] * len(years)  # Initial base of the stack
+        for room_type in room_types:
+            ax.fill_between(
+                years, bottom, [sum(x) for x in zip(bottom, data[room_type])],
+                label=room_type, alpha=0.9, color=color_mapping[room_type]
+            )
+            bottom = [sum(x) for x in zip(bottom, data[room_type])]  # Update the base
+        
+        # Add a title with a background box
+        title_text = borough.title()
+        ax.text(
+            0.5, 1.1, title_text,  # Position of the title
+            fontsize=10, color="#333333", ha='center', va='center',
+            transform=ax.transAxes
+        )
+
+        ax.set_ylim(0, y_max)  # Set the unified Y-axis range
+        
+        # Display logic for X and Y axes
+        if borough in ["Enfield", "Harrow", "Hillingdon", "Hounslow", "Kingston", "Richmond", "Sutton"]:
+            # Show Y-axis ticks and labels
+            ax.set_yticks(range(0, y_max + 1, 3000))
+            ax.yaxis.set_major_formatter(ticker.StrMethodFormatter('{x:,.0f}'))  # Format ticks
+            ax.tick_params(axis='y', labelsize=8)
+            ax.set_ylabel("Listings", fontsize=9)
+            
+            # Show X-axis ticks and labels
+            ax.set_xticks(years)
+            ax.set_xticklabels(["2019", "2024"], fontsize=9)
+        else:
+            # Hide Y-axis ticks
+            ax.set_yticks(range(0, y_max + 1, 3000))
+            ax.tick_params(axis='y', labelsize=0)
+            
+            # Hide X-axis ticks and labels
+            ax.set_xticks(years)
+            ax.tick_params(axis='x', labelsize=0)
+
+        # Add gridlines
+        ax.grid(visible=True, linestyle='--', linewidth=0.5, alpha=0.6)
+
+# Add a global legend
+fig.subplots_adjust(bottom=0)  # Increase bottom space for the legend
+fig.legend(
+    color_mapping.keys(), loc="lower right", ncol=3, fontsize=12, 
+    title="Room Type", title_fontsize=13, frameon=True
+)
+fig.suptitle("Figure 1: Number of Airbnb Listings in London Boroughs (2019 vs 2024)", fontsize=18, fontweight='bold')
+plt.show()
+```
+
+In figure1, professional hosts’ listings are concentrated in central London and tourist areas(Westminster, Kensington). In contrast, non-professional hosts(aim to supplement income), tend to have their listings on the outskirts of London.
+The Airbnb market in London has the polarization between the sharing-economy and commercialization.
+
+## 7.Drawing on your previous answers, and supporting your response with evidence, how could the InsideAirbnb data set be used to inform the regulation of Short-Term Lets (STL) in London?
+
+According to our research in question 6, entire home/apt and non-professional hosts (only have one Airbnb listing) are two significant factors of London Airbnb. Our following studies will make use of these two points. 
+
+```{python}
+# Load the dataset for Inside Airbnb updated September 2024
+url = "https://data.insideairbnb.com/united-kingdom/england/london/2024-09-06/data/listings.csv.gz"
+
+# geojson dataset
+url2 = "https://data.insideairbnb.com/united-kingdom/england/london/2024-09-06/visualisations/neighbourhoods.geojson"
+
+url3 = "https://github.com/chenyiting1003/NA_GROUP1/raw/refs/heads/main/datadownload_local_rent.xlsx"
+```
+
+```{python}
+# Load the dataset for Inside Airbnb updated September 2024
+listings_2024 = pd.read_csv(BytesIO(rq.get(url).content), compression='gzip')
+
+# Filter rows where 'price' is not 0 and room_type is "Entire home/apt"
+filtered_listings_2024 = listings_2024[
+    (listings_2024["price"] != 0) & (listings_2024["room_type"] == "Entire home/apt")
+]
+```
+
+```{python}
+# geojson dataset
+neighborhood_gdf = gpd.read_file(url2)
+
+# Convert CRS to British National Grid (EPSG:27700) and calculate area in square kilometers
+neighborhood_gdf = neighborhood_gdf.to_crs(epsg=27700)
+neighborhood_gdf['area_km2'] = neighborhood_gdf.geometry.area / 1e6
+```
+
+```{python}
+# Download and load the Excel file
+response = rq.get(url3)
+response.raise_for_status()  # Raise an exception for HTTP errors
+
+# Read the Excel file directly from the response content
+data_local_rent = pd.read_excel(BytesIO(response.content), skiprows=7, engine="openpyxl")
+```
+
+```{python}
+# Select required columns and remove rows with missing 'price'
+listings_filtered = listings_2024[['id', 'room_type', 'price', 'neighbourhood_cleansed']].dropna(subset=['price'])
+
+# Clean and convert 'price' column to numeric
+listings_filtered['price'] = listings_filtered['price'].str.replace('[$,]', '', regex=True).astype(float)
+
+# Calculate the average price for all listings
+average_airbnb_price = listings_filtered['price'].mean()
+#print(f"Average Airbnb price per night in 2024: ${average_airbnb_price:.2f}")
+
+# Filter for 'Entire home/apt' room type and calculate its average price
+average_entire_home_price = listings_filtered.loc[listings_filtered['room_type'] == 'Entire home/apt', 'price'].mean()
+#print(f"Average price for Entire home/apt: ${average_entire_home_price:.2f}")
+
+# Calculate the average price by neighbourhood
+average_price_by_neighbourhood = listings_filtered.groupby('neighbourhood_cleansed', as_index=False)['price'].mean()
+```
+
+```{python}
+# Convert 'Time period' column to datetime format
+data_local_rent['Time period'] = pd.to_datetime(data_local_rent['Time period'], errors='coerce')
+
+# Filter data for 'London' and year 2024, creating a copy to avoid SettingWithCopyWarning
+london_2024_data = data_local_rent[
+    (data_local_rent['Region or country name'] == 'London') & 
+    (data_local_rent['Time period'].dt.year == 2024)
+].copy()
+
+# Calculate daily rental price (assuming 30 days per month)
+london_2024_data['Daily rental price (£)'] = london_2024_data['Rental price (£)'] / 30
+
+# Calculate the average daily rent from January to October 2024
+average_daily_rent_2024_10 = london_2024_data['Daily rental price (£)'].sum() / 305
+
+# Display the result
+#print(f"Average daily rental price in London (Jan-Oct 2024): £{average_daily_rent_2024_10:.2f}")
+```
+
+```{python}
+# Calculate annual revenue
+voa_revenue_per_annum = average_daily_rent_2024_10 * 365
+stl_revenue_per_annum_90 = average_entire_home_price * 90
+stl_revenue_per_annum_102 = average_entire_home_price * 102
+
+# Define table data
+table_data = {
+    'Price Benchmark': ['VOA (mean)', 'STL (mean) 90 nights', 'STL (mean) 102 nights'],
+    'Rental Period (nights/year)': [365, 90, 102],
+    'Revenue per Night (£)': [average_daily_rent_2024_10, average_entire_home_price, average_entire_home_price],
+    'Revenue per Annum (£)': [voa_revenue_per_annum, stl_revenue_per_annum_90, stl_revenue_per_annum_102]
+}
+
+# Create DataFrame
+comparison_df = pd.DataFrame(table_data)
+
+# Format numbers as integers
+comparison_df['Revenue per Night (£)'] = comparison_df['Revenue per Night (£)'].astype(int)
+comparison_df['Revenue per Annum (£)'] = comparison_df['Revenue per Annum (£)'].astype(int)
+
+# Adjust figure size
+fig, ax = plt.subplots(figsize=(9.5, 4))  # Adjust figure width to fit content
+ax.axis('tight')
+ax.axis('off')
+
+# Create the table
+table = ax.table(
+    cellText=comparison_df.values,
+    colLabels=comparison_df.columns,
+    cellLoc='center',
+    loc='center'
+)
+
+# Add table title, adjust y value to reduce the distance between title and table
+fig.suptitle(
+    "Table 2: Comparison of Average Nightly Revenue from Airbnb vs Open Market Rent in London",
+    fontsize=12, fontweight='bold', y=0.75  # Lower y value to bring title closer to table
+)
+
+# Set table styles
+table.auto_set_font_size(False)
+table.set_fontsize(10)
+
+# Adjust column widths and row heights, evenly distribute the table width
+row_height = 0.1
+num_cols = len(comparison_df.columns)  # Count the number of columns
+total_width = 1.0  # Total table width (percentage)
+
+for (row, col), cell in table.get_celld().items():
+    cell.set_edgecolor('black')  # Set border color
+    cell.set_linewidth(0.5)  # Set border width
+
+    # Set header row style
+    if row == 0:  
+        cell.set_facecolor("#D9EAF7")  # Set background color for header
+        cell.set_text_props(fontweight='bold')  # Make header text bold
+        row_height = 0.15
+
+    # Set cell width, evenly distribute the total width
+    cell.set_width(total_width / num_cols)
+
+    # Set row height
+    cell.set_height(row_height)
+
+# Automatically adjust layout
+plt.tight_layout(rect=[0, 0, 1, 0.95])  # Ensure a tight layout between table and title
+
+# Display the table
+plt.show()
+```
+
+As shown in Table 2, we use Valuation Office Agency (VOA) data to estimate the average daily income from long-term rentals in London at £67 per day, resulting in an annual income of approximately £24,446. In comparison, data from the Inside Airbnb dataset estimates the average daily income from short-term lets (STL) at £239. If limited to the legally permitted 90 nights per year, STL generates £21,489 annually, slightly below the income from long-term rentals. However, exceeding the 90-night limit (around 102 nights) raises STL earnings to £24,354, surpassing long-term rental income. Despite additional STL costs, such as cleaning and vacancy risks, this higher return suggests the potential for speculative behavior.
+
+Secondly, we use “Airbnb Count Density”, “Single Host Counts 2024”, and “Professional Host Counts 2024” as independent variables, with “Rental Price” as the dependent variable. While these variables are not initially normally distributed, they achieve normality after applying Box-Cox transformations. 
+
+```{python}
+# Counting the number of Entire home/apt airbnb in London neighborhoods in September 2024
+airbnb_24_counts = filtered_listings_2024.groupby('neighbourhood_cleansed').size().reset_index(name='count_24')
+
+filtered_listings_2024 = filtered_listings_2024.merge(
+    airbnb_24_counts, on='neighbourhood_cleansed', how='left'
+)
+```
+
+```{python}
+# Filter records where host_total_listings_count > 1 and count unique host_id by neighbourhood_cleansed
+PROhost_counts_2024 = (
+    filtered_listings_2024[filtered_listings_2024['host_total_listings_count'] > 1]
+    .drop_duplicates(subset=['host_id'])
+    .groupby('neighbourhood_cleansed')['host_id']
+    .nunique()
+    .reset_index()
+    .rename(columns={'host_id': 'PROhost_counts_2024'})
+)
+
+# Filter records where host_total_listings_count == 1 and count unique host_id by neighbourhood_cleansed
+single_host_counts_2024 = (
+    filtered_listings_2024[filtered_listings_2024['host_total_listings_count'] == 1]
+    .drop_duplicates(subset=['host_id'])
+    .groupby('neighbourhood_cleansed')['host_id']
+    .nunique()
+    .reset_index()
+    .rename(columns={'host_id': 'single_host_counts_2024'})
+)
+```
+
+```{python}
+# Merge both results into filtered_listings_2024
+filtered_listings_2024 = filtered_listings_2024.merge(
+    PROhost_counts_2024, on='neighbourhood_cleansed', how='left'
+).merge(
+    single_host_counts_2024, on='neighbourhood_cleansed', how='left'
+)
+
+# Select and rename columns
+filtered_listings_2024 = filtered_listings_2024[
+    ['neighbourhood_cleansed', 'count_24', 'PROhost_counts_2024', 'single_host_counts_2024']
+]
+```
+
+```{python}
+# Ensure 'Time period' column is treated as a string
+data_local_rent['Time period'] = data_local_rent['Time period'].astype(str)
+
+# Filter rows where 'Time period' is between '2023-09' and '2024-09'
+filtered_data_23_24 = data_local_rent[
+    (data_local_rent['Time period'] >= "2023-09-01") & 
+    (data_local_rent['Time period'] <= "2024-09-30") &
+    (data_local_rent['Region or country name'] == "London")
+]
+
+# Group by 'Area name' and calculate the mean of 'Rental price (£)'
+average_rent_23_24 = filtered_data_23_24.groupby('Area name', as_index=False)['Rental price (£)'].mean()
+
+# Sort the data by 'Rental price (£)' in descending order
+average_rent_24 = average_rent_23_24.sort_values(by='Rental price (£)', ascending=False)
+```
+
+```{python}
+# Standardize column names for merging
+filtered_listings_2024['neighbourhood_cleansed'] = filtered_listings_2024['neighbourhood_cleansed'].str.strip().str.lower()
+average_rent_24['Area name'] = average_rent_24['Area name'].str.strip().str.lower()
+
+# Merge datasets and drop redundant column
+merged_local_airbnb = filtered_listings_2024.merge(
+    average_rent_24,
+    left_on='neighbourhood_cleansed',
+    right_on='Area name',
+    how='inner'
+).drop(columns=['Area name'])
+
+# Drop duplicate records by 'neighbourhood_cleansed' and rename 'Rental price (£)' column
+merged_local_airbnb = (
+    merged_local_airbnb.drop_duplicates(subset=['neighbourhood_cleansed'])
+    .rename(columns={'Rental price (£)': 'rental_price'})
+)
+```
+
+```{python}
+# Prepare area data and merge with merged_local_airbnb
+area_data = neighborhood_gdf[['neighbourhood', 'area_km2']].copy()
+area_data['neighbourhood'] = area_data['neighbourhood'].str.strip().str.lower()
+
+merged_local_airbnb['neighbourhood_cleansed'] = merged_local_airbnb['neighbourhood_cleansed'].str.strip().str.lower()
+
+# Merge and drop redundant columns
+merged_local_airbnb = merged_local_airbnb.merge(
+    area_data,
+    left_on='neighbourhood_cleansed',
+    right_on='neighbourhood',
+    how='inner'
+).drop(columns=['neighbourhood'])
+
+# Calculate density of count_24 per square kilometer
+merged_local_airbnb['count_density'] = merged_local_airbnb['count_24'] / merged_local_airbnb['area_km2']
+```
+
+```{python}
+# Perform Shapiro-Wilk test for normality on specified variables
+variables_1 = ['count_density', 'PROhost_counts_2024', 'rental_price', 'single_host_counts_2024']
+
+for var in variables_1:
+    data = merged_local_airbnb[var].dropna()
+    stat, p_value = stats.shapiro(data)
+    result = "Normal" if p_value > 0.05 else "Not Normal"
+    #print(f"{var}: Stat={stat:.4f}, p={p_value:.4f}, Result={result}")
+```
+
+```{python}
+# Apply Box-Cox transformation to specified variables
+for var in variables_1:
+    # Filter positive values (required for Box-Cox) and drop NaN
+    data = merged_local_airbnb[var].dropna().loc[lambda x: x > 0]
+
+    # Perform Box-Cox transformation
+    transformed_data, lambda_val = stats.boxcox(data)
+    
+    # Assign transformed data back to the DataFrame
+    merged_local_airbnb.loc[data.index, f'{var}_boxcox'] = transformed_data
+```
+
+```{python}
+# Perform Shapiro-Wilk test for normality on specified variables
+variables_2 = ['count_density_boxcox', 'PROhost_counts_2024_boxcox', 'rental_price_boxcox', 'single_host_counts_2024_boxcox']
+
+for var in variables_2:
+    data = merged_local_airbnb[var].dropna()
+    stat, p_value = stats.shapiro(data)
+    result = "Normal" if p_value > 0.05 else "Not Normal"
+    #print(f"{var}: Stat={stat:.4f}, p={p_value:.4f}, Result={result}")
+```
+
+```{python}
+# Set independent variables and dependent variable
+x_vars = ['count_density_boxcox', 'PROhost_counts_2024_boxcox', 'single_host_counts_2024_boxcox']
+y_var = 'rental_price_boxcox'
+
+# Create scatter plots with regression lines
+fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+for ax, x_var in zip(axes, x_vars):
+    sns.regplot(
+        x=merged_local_airbnb[x_var], 
+        y=merged_local_airbnb[y_var], 
+        ax=ax, 
+        scatter_kws={'alpha': 0.6}, 
+        line_kws={'color': 'red'}
+    )
+    ax.set_title(f'{y_var} vs {x_var}')
+    ax.set_xlabel(x_var)
+    ax.set_ylabel(y_var)
+
+# Add a large title for the entire figure
+fig.suptitle("Figure.2 Normality Analysis", fontsize=16, y=1.02)
+
+plt.tight_layout()
+plt.show()
+```
+
+```{python}
+# Calculate correlations with rental_price_boxcox
+variables_2 = ['count_density_boxcox', 'PROhost_counts_2024_boxcox', 'rental_price_boxcox', 'single_host_counts_2024_boxcox']
+
+correlations = merged_local_airbnb[variables_2].corr()['rental_price_boxcox'].drop('rental_price_boxcox')
+
+# Output results
+#print("Correlations with rental_price_boxcox:")
+#print(correlations)
+```
+
+The scatterplot and correlation analysis reveal a positive correlation between all three variables and “rental price”, with “count density Box-Cox” showing the strongest correlation (0.932). “PROhosts” also exhibit a high correlation (0.912), likely because professional hosts tend to list higher-priced properties. In contrast, non-professional hosts show a weaker and more scattered correlation (0.885), suggesting they have less influence on market prices.However, there may be a very large correlation effect between them.
+
+```{python}
+# Calculate VIF for independent variables
+X = add_constant(merged_local_airbnb[['count_density_boxcox', 'PROhost_counts_2024_boxcox', 'single_host_counts_2024_boxcox']])
+vif1 = pd.DataFrame({
+    'Variable': X.columns,
+    'VIF': [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
+})
+
+# Display results
+#print(vif1)
+```
+
+```{python}
+# Calculate VIF for independent variables
+X = add_constant(merged_local_airbnb[['count_density_boxcox', 'single_host_counts_2024_boxcox']])
+vif2 = pd.DataFrame({
+    'Variable': X.columns,
+    'VIF': [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
+})
+
+# Display results
+#print(vif2)
+```
+
+To prepare for the Ordinary Least Squares (OLS) Regression, we carry out the Variance Inflation Factor (VIF) Test beforehand. The data for all the three independent variables are greater than 10, indicating that they have a high degree of multicollinearity. Therefore, we gradually removed the variables with the highest VIF values and recalculated the VIF. After removing the “PROhosts box-cox”, VIF data for both of the other two variables are below 10.
+
+```{python}
+# Perform OLS regression using statsmodels
+data = merged_local_airbnb[['count_density_boxcox', 'single_host_counts_2024_boxcox', 'rental_price_boxcox']].dropna()
+X = sm.add_constant(data[['count_density_boxcox', 'single_host_counts_2024_boxcox']])
+y = data['rental_price_boxcox']
+
+model = sm.OLS(y, X).fit()
+
+# visualization
+#print(model.summary())
+```
+
+Regression Equation:
+
+*Y=0.7585+[8.355*10^(-6)]X1+[2.22*10^(-7)]X2*
+
+*Y: rental price box-cox*
+
+*X1: count density box-cox*
+
+*X2: single host counts 2024 box-cox*
+
+
+According to the equation, "count density box-cox" has a significant positive effect on "rental price box-cox". This suggests that demand for housing in high density areas is usually greater and rental prices are therefore higher, especially in large cities (e.g. London) where there is a strong positive correlation between housing density and rents. However, the effect of "single host counts 2024 box-cox" on the dependent variable is not significant (p-value = 0.798). This indicates that the market behavior of non-professional landlords has a weak impact on the overall rent level. The rental market may be dominated by professional landlords, who usually offer higher prices and are more concentrated in the core area, while single landlords are mostly individual homeowners who lack the scale effect to influence market prices. The overall model explains “87.1%” of the variance in the dependent variable (R² = 0.871), which is a good fit, with residuals basically conforming to a normal distribution.
+
+```{python}
+# Calculate residuals and fitted values
+residuals, fitted_values = model.resid, model.fittedvalues
+
+# Perform Durbin-Watson test
+#print(f"Durbin-Watson statistic: {durbin_watson(residuals):.4f}")
+
+# Perform Breusch-Pagan test for heteroscedasticity
+lm_stat, p_value, _, _ = het_breuschpagan(residuals, X)
+#print(f"Breusch-Pagan Test: LM Statistic = {lm_stat:.4f}, p-value = {p_value:.4f}")
+```
+
+```{python}
+# Split data, train linear regression model, and evaluate R² score
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+lr = LinearRegression().fit(X_train, y_train)
+#print("R-squared:", r2_score(y_test, lr.predict(X_test)))
+```
+
+```{python}
+# Align residuals with merged_local_airbnb
+merged_local_airbnb['residuals'] = model.resid.reset_index(drop=True)
+
+# Clean and standardize strings
+neighborhood_gdf['neighbourhood'] = neighborhood_gdf['neighbourhood'].str.strip().str.lower()
+merged_local_airbnb['neighbourhood_cleansed'] = merged_local_airbnb['neighbourhood_cleansed'].str.strip().str.lower()
+
+# Merge geometry with residuals
+geo_data = neighborhood_gdf[['neighbourhood', 'geometry']].merge(
+    merged_local_airbnb[['neighbourhood_cleansed', 'residuals']],
+    left_on='neighbourhood',
+    right_on='neighbourhood_cleansed',
+    how='inner'
+)
+```
+
+```{python}
+# Create Queen contiguity weights matrix and standardize
+w = Queen.from_dataframe(geo_data, use_index=True)
+w.transform = 'R'
+
+# Calculate Moran's I for residuals
+moran = Moran(geo_data['residuals'], w)
+#print(f"Moran's I: {moran.I:.4f}, p-value: {moran.p_sim:.4f}")
+# print("Significant spatial autocorrelation." if moran.p_sim < 0.05 else "No significant spatial autocorrelation.")
+
+# Plot residuals map
+fig, ax = plt.subplots(figsize=(10, 8))
+geo_data.plot(
+    column='residuals', 
+    cmap='coolwarm', 
+    edgecolor='black', 
+    legend=True, 
+    linewidth=0.5, 
+    ax=ax
+)
+ax.set_title("Figure 3: Local Moran's I Residuals Cluster Map")
+ax.axis('off')
+
+plt.tight_layout()
+plt.show()
+```
+
+This map shows the spatial distribution of the residuals. The Red areas indicate positive residuals, where actual values are higher than model predictions, concentrated in the South West and South East regions of London. The Blue areas indicate negative residuals, where actual values are lower than model predictions, concentrated in the East and North East regions. Although there is some clustering of red and blue regions, there is no clear pattern of spatial clustering in the overall distribution. This is consistent with the results of Moran's I and p values. The small value of Moran's I and p-value > 0.05 indicate that the residuals are not significantly spatially clustered and the distribution is essentially random. Therefore, the spatial autocorrelation is not significant.
+
+## Recommendations 
+1. Strictly Enforce the 90-Day Limit: Regulate STL to prevent speculative activities that disrupt the housing market. 
+
+2. Neighborhood-specific Controls: Adjust Airbnb listings to align with local housing needs, promoting balance and sustainability. 
+
+3. Address Broader Influences: Consider landlord behavior, economic conditions, and structural factors in housing policy. 
+
+## Limitations 
+1. Data Gaps: Missing values and incomplete neighborhood coverage affect analysis accuracy. 
+
+2. Spatial Variations: While residuals lack overall clustering, local spatial differences still require deeper investigation.
+
+3. Box-Cox Transformation: Ensuring normality may alter some data’s original characteristics.
+
+4. Temporal Discrepancies: Airbnb pricing reflects specific points in time, whereas local rents are annual averages. 
+
+5. Single-Year Data: The model captures only one year of data, limiting trend analysis. 
+
+## Conclusion 
+Our analysis indicates the density of Airbnb listings as a key driver of local rental prices. Regulation of short-term rentals limited to 90 days and neighborhood-specific quantity controls are critical to achieving sustainability in the rental market.
+
+## References
