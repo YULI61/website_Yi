@@ -1,0 +1,400 @@
+:root {
+  --primary: #2C3E50;
+  --accent: #7F8C8D;
+  --bg: #FAFAFA;
+  --text: #2F2F2F;
+  --card-bg: #FFFFFF;
+  --hover: #34495E;
+}
+
+body {
+  font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+a {
+  text-decoration: none;
+  color: var(--primary);
+}
+
+/* 导航栏 */
+.navbar {
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+.nav-container {
+  max-width: 1100px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+}
+
+.nav-logo a {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.nav-links a {
+  margin-left: 1.5rem;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: var(--hover);
+}
+
+/* Hero - White Style */
+.hero.hero-white {
+  background-color: white;
+  color: var(--primary);
+  padding: 100px 20px 80px;
+  text-align: center;
+}
+
+.hero-white .hero-name {
+  font-family: 'Dancing Script', cursive;
+  font-size: 3.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--primary);
+}
+
+.hero-white .hero-role {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 1.2rem;
+  color: var(--accent);
+}
+
+.hero-white .hero-line {
+  width: 60px;
+  height: 3px;
+  background: var(--primary);
+  margin: 0 auto 1.2rem auto;
+  border-radius: 2px;
+  opacity: 0.4;
+}
+
+.hero-white .hero-tagline {
+  font-size: 1.05rem;
+  max-width: 600px;
+  margin: auto;
+  color: var(--text);
+}
+
+.hero-white .btn-scroll {
+  margin-top: 2rem;
+  display: inline-block;
+  background: var(--primary);
+  color: white;
+  padding: 0.7rem 1.4rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.hero-white .btn-scroll:hover {
+  background: var(--hover);
+  transform: translateY(-2px);
+}
+
+
+.btn-scroll {
+  margin-top: 2rem;
+  display: inline-block;
+  background: white;
+  color: var(--primary);
+  padding: 0.7rem 1.4rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.btn-scroll:hover {
+  background: #f0f0f0;
+  transform: translateY(-2px);
+}
+
+/* 主体容器 */
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 2rem 1.5rem;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--primary);
+  text-align: center;
+  margin: 3rem 0 1.5rem;
+}
+
+/* 项目卡片 */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 2rem;
+}
+
+.project-card {
+  display: flex;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.project-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+}
+
+.project-card .left {
+  flex: 1;
+  min-width: 180px;
+  padding: 1rem;
+  text-align: center;
+  background: #f6f6f6;
+}
+
+.project-card .left img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.project-card .left h3 {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--primary);
+  margin: 0.2rem 0 0;
+}
+
+.project-card .right {
+  flex: 2;
+  padding: 1.2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.project-card .right p {
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-group {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.btn-group a {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.btn-group a:first-child {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-group a:first-child:hover {
+  background: var(--hover);
+}
+
+.secondary-btn {
+  background: #e9ecef;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.secondary-btn:hover {
+  background: var(--primary);
+  color: white;
+}
+
+/* 联系方式 */
+.contact-section {
+  background-color: #f8f9fa;
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.contact-box {
+  max-width: 700px;
+  margin: auto;
+}
+
+.contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0 0;
+}
+
+.contact-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #e1e4e8;
+  font-size: 1rem;
+}
+
+.contact-list li span {
+  font-weight: 400;
+  color: var(--text);
+}
+
+.contact-list li a {
+  color: var(--primary);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--primary);
+}
+
+.contact-list li a:hover {
+  color: var(--hover);
+  border-bottom-color: var(--hover);
+}
+
+/* Lightbox 弹窗 */
+.lightbox {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.lightbox-content {
+  background: white;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  border-radius: 12px;
+  padding: 2rem;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  font-weight: bold;
+  color: #666;
+}
+
+/* 锚点偏移修复 */
+#projects, #visuals, #contact {
+  scroll-margin-top: 100px;
+}
+
+/* 响应式 */
+@media (max-width: 700px) {
+  .project-card {
+    flex-direction: column;
+  }
+
+  .contact-list li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .contact-list li span {
+    margin-top: 0.3rem;
+  }
+}
+
+.hero-iframe-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.hero-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  z-index: 1;
+  pointer-events: none; /* Prevent iframe from blocking scroll or clicks */
+}
+
+.hero-overlay-text {
+  position: relative;
+  z-index: 2;
+  color: white;
+  text-align: center;
+  padding-top: 30vh;
+  font-family: 'Playfair Display', serif;
+}
+
+.hero-overlay-text h1 {
+  font-size: 2.8rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+.hero-overlay-text p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+
+.hero-overlay-text .btn-scroll {
+  background: #4FC3F7;
+  color: #111;
+  padding: 0.7rem 1.4rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s;
+}
+
+.hero-overlay-text .btn-scroll:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .hero-iframe-container {
+    height: auto;
+    min-height: 400px;
+  }
+
+  .hero-overlay-text {
+    padding-top: 20vh;
+  }
+}

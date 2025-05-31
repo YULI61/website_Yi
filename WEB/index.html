@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Yi Liu | Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="nav-logo"><a href="#">Yi Liu</a></div>
+      <nav class="nav-links">
+        <a href="#projects">Projects</a>
+        <!-- <a href="#visuals">Gallery</a> -->
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+<!-- Hero - White Background Style -->
+<section class="hero-iframe-container">
+  <iframe 
+    src="https://yuli61.github.io/Group_visual/first_page/" 
+    class="hero-iframe"
+    frameborder="0"
+    scrolling="no"
+  ></iframe>
+  <div class="hero-overlay-text">
+    <h1>Be Prepared For The Urban & Spatial Beyond</h1>
+    <p>Data-driven exploration through cities, maps, and design.</p>
+    <a href="#projects" class="btn-scroll">↓ Explore My Work</a>
+  </div>
+</section>
+
+
+
+  <!-- Projects -->
+  <div class="container">
+    <h2 id="projects" class="section-title">Research Projects</h2>
+    <div class="project-grid">
+
+      <!-- 4 Research Projects -->
+      <div class="project-card" data-img="images/greenspace.png">
+        <div class="left">
+          <img src="images/greenspace.png" alt="Greenspace">
+          <h3>Greenspace & Obesity</h3>
+        </div>
+        <div class="right">
+          <p>Explored links between green space accessibility and childhood obesity using regression modeling. Identified tennis court density and deprivation index as key indicators of health inequality.</p>
+          <div class="btn-group">
+            <a href="assets/greenspace.pdf" target="_blank">View PDF</a>
+            <a href="https://github.com/YULI61/website_Yi/blob/main/greenspace-obesity.ipynb" target="_blank" class="secondary-btn">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card" data-img="images/crime.png">
+        <div class="left">
+          <img src="images/crime.png" alt="Crime">
+          <h3>Urban Crime Patterns</h3>
+        </div>
+        <div class="right">
+          <p>Used Random Forest and XGBoost models to understand the role of urban density and social factors in shaping crime distribution across London boroughs.</p>
+          <div class="btn-group">
+            <a href="assets/crime.pdf" target="_blank">View PDF</a>
+            <a href="https://github.com/YULI61/website_Yi/blob/main/urban-crime-model.ipynb" target="_blank" class="secondary-btn">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card" data-img="images/airbnb.png">
+        <div class="left">
+          <img src="images/airbnb.png" alt="Airbnb">
+          <h3>Airbnb & Rental Prices</h3>
+        </div>
+        <div class="right">
+          <p>Analyzed Inside Airbnb data and used regression with Box-Cox transformation to investigate how host density and professionalism affect rental affordability in London.</p>
+          <div class="btn-group">
+            <a href="assets/airbnb.pdf" target="_blank">View PDF</a>
+            <a href="https://github.com/YULI61/website_Yi/blob/main/airbnb-housing.qmd" target="_blank" class="secondary-btn">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card" data-img="images/simulation.png">
+        <div class="left">
+          <img src="images/simulation.png" alt="Urban Simulation">
+          <h3>Urban Simulation</h3>
+        </div>
+        <div class="right">
+          <p>Studied the correlation between housing growth, population density, and long-term public health outcomes in rapidly changing urban neighborhoods.</p>
+          <div class="btn-group">
+            <a href="assets/simulation.pdf" target="_blank">View PDF</a>
+            <a href="https://github.com/YULI61/website_Yi/blob/main/Urban Simulation" target="_blank" class="secondary-btn">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <h2 class="section-title">Web & Map Visualizations</h2>
+    <div class="project-grid">
+
+      <!-- 2 Visualization Projects -->
+      <div class="project-card" data-img="images/tourism.png">
+        <div class="left">
+          <img src="images/tourism.png" alt="Tourism Map">
+          <h3>Interactive Tourism Map</h3>
+        </div>
+        <div class="right">
+          <p>Designed a web map for major London attractions using HTML, CSS, and JavaScript, with city walk route generation based on user-selected categories.</p>
+          <div class="btn-group">
+            <a href="https://yuli61.github.io/Group_visual/london-tourism-site/index.html" target="_blank">View Project</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card" data-img="images/housing.png">
+        <div class="left">
+          <img src="images/housing.png" alt="Housing Dashboard">
+          <h3>Housing Market Dashboard</h3>
+        </div>
+        <div class="right">
+          <p>Developed a responsive dashboard to visualize spatial and temporal changes in London housing prices using open-source datasets.</p>
+          <div class="btn-group">
+            <a href="https://yuli61.github.io/website_Yi/Mapbox_final.html" target="_blank">View Project</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lightbox Viewer -->
+    <div id="cardLightbox" class="lightbox" onclick="closeCardLightbox()">
+      <div class="lightbox-content" onclick="event.stopPropagation();">
+        <span class="close-btn" onclick="closeCardLightbox()">×</span>
+        <img id="lightboxImg" src="" alt="Project Image" style="width:100%; border-radius:10px; margin-bottom:1rem;">
+        <div id="cardContent"></div>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <section id="contact" class="contact-section">
+      <h2 class="section-title">Contact</h2>
+      <div class="contact-box">
+        <ul class="contact-list">
+          <li><strong>Email</strong><span><a href="mailto:sixandone115@gmail.com">sixandone115@gmail.com</a></span></li>
+          <li><strong>LinkedIn</strong><span><a href="https://www.linkedin.com/in/your-link" target="_blank">linkedin.com/in/your-link</a></span></li>
+          <li><strong>GitHub</strong><span><a href="https://github.com/your-name" target="_blank">github.com/your-name</a></span></li>
+          <li><strong>Location</strong><span>London, UK</span></li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <!-- JS -->
+  <script>
+    function closeCardLightbox() {
+      document.getElementById('cardLightbox').style.display = 'none';
+    }
+
+    document.querySelectorAll('.project-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const title = card.querySelector('h3')?.innerText || "";
+        const fullText = card.querySelector('p')?.innerText || "";
+        const linkHTML = card.querySelector('.btn-group')?.outerHTML || "";
+        const imgSrc = card.getAttribute("data-img");
+
+        document.getElementById('cardContent').innerHTML = `
+          <h3 style="color:#2C3E50;margin-top:0;">${title}</h3>
+          <p style="margin:1rem 0;">${fullText}</p>
+          ${linkHTML}
+        `;
+        document.getElementById("lightboxImg").src = imgSrc;
+        document.getElementById('cardLightbox').style.display = 'flex';
+      });
+    });
+  </script>
+
+</body>
+</html>
