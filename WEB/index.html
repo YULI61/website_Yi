@@ -30,8 +30,8 @@
     scrolling="no"
   ></iframe>
   <div class="hero-overlay-text">
-    <h1>Be Prepared For The Urban & Spatial Beyond</h1>
-    <p>Data-driven exploration through cities, maps, and design.</p>
+    <h1>From Data to Urban Insight</h1>
+    <p>Combining geospatial analysis, network modeling, and visual storytelling to explore urban challenges.</p>
     <a href="#projects" class="btn-scroll">↓ Explore My Work</a>
   </div>
 </section>
@@ -47,10 +47,11 @@
       <div class="project-card" data-img="images/greenspace.png">
         <div class="left">
           <img src="images/greenspace.png" alt="Greenspace">
-          <h3>Greenspace & Obesity</h3>
+          <h3>Does More Greenspace Lead to Less Obesity?</h3>
         </div>
         <div class="right">
-          <p>Explored links between green space accessibility and childhood obesity using regression modeling. Identified tennis court density and deprivation index as key indicators of health inequality.</p>
+          <p><strong>Spatial Regression, Urban Health Inequality, GIS Buffer Analysis</strong></p>
+          <p>The "Greenspace & Childhood Obesity" project focused on London and used QGIS to create buffer zones around green spaces, combined with Python-based OLS and Spatial Error Models to analyze the spatial relationship between green space access and childhood obesity rates. A correlation matrix and VIF analysis were used to identify key factors such as tennis court density and deprivation index. The project integrated multiple urban datasets and used spatial regression and visual mapping to highlight how certain types of green spaces relate to health inequality. </p>
           <div class="btn-group">
             <a href="assets/greenspace.pdf" target="_blank">View PDF</a>
             <a href="https://github.com/YULI61/website_Yi/blob/main/greenspace-obesity.ipynb" target="_blank" class="secondary-btn">GitHub</a>
@@ -61,10 +62,11 @@
       <div class="project-card" data-img="images/crime.png">
         <div class="left">
           <img src="images/crime.png" alt="Crime">
-          <h3>Urban Crime Patterns</h3>
+          <h3>How Does Urban Environment Shape Crime Rates?</h3>
         </div>
         <div class="right">
-          <p>Used Random Forest and XGBoost models to understand the role of urban density and social factors in shaping crime distribution across London boroughs.</p>
+          <p><strong>Urban Crime Analysis, Machine Learning Modeling, Spatial Visualization</strong></p>
+          <p>The "Urban Crime Patterns" project focused on crime data across London boroughs and applied Python-based machine learning models, including Random Forest and XGBoost, to analyze how urban density, demographic structure, and socioeconomic factors influence the spatial distribution of crime. The project used area-level aggregation, spatial visualization, and feature importance analysis to reveal how variables like population density, deprivation level, and youth ratio contribute differently to various crime types. Grid-based mapping and classification heatmaps were used to visualize high-risk areas and support spatial decision-making for urban governance and public safety resource allocation.</p>
           <div class="btn-group">
             <a href="assets/crime.pdf" target="_blank">View PDF</a>
             <a href="https://github.com/YULI61/website_Yi/blob/main/urban-crime-model.ipynb" target="_blank" class="secondary-btn">GitHub</a>
@@ -78,7 +80,8 @@
           <h3>Airbnb & Rental Prices</h3>
         </div>
         <div class="right">
-          <p>Analyzed Inside Airbnb data and used regression with Box-Cox transformation to investigate how host density and professionalism affect rental affordability in London.</p>
+          <p><strong>Platform Economy & Rent Analysis, Multiple Regression Modeling, Data Visualization & Spatial Interpretation</strong></p>
+          <p>The "Airbnb & Rental Prices" project explored the impact of short-term rental activity on long-term rental affordability in London by combining Inside Airbnb data with public rental records. Python-based multiple linear regression models were applied, with Box-Cox transformation used to normalize variables and improve model fit. Key predictors such as host density, level of commercialization, and listing type were analyzed in relation to rental prices. Spatial visualization showed a strong overlap between Airbnb hotspots and high-rent areas, suggesting a potential crowding-out effect in the housing market. This was a group project; responsibility included Questions 6 and 7, as well as contributing to the overall research structure and discussion design.</p>
           <div class="btn-group">
             <a href="assets/airbnb.pdf" target="_blank">View PDF</a>
             <a href="https://github.com/YULI61/website_Yi/blob/main/airbnb-housing.qmd" target="_blank" class="secondary-btn">GitHub</a>
@@ -92,7 +95,14 @@
           <h3>Urban Simulation</h3>
         </div>
         <div class="right">
-          <p>Studied the correlation between housing growth, population density, and long-term public health outcomes in rapidly changing urban neighborhoods.</p>
+          <p><strong>Urban Transport Network Analysis, Centrality & Node Vulnerability, Spatial Interaction Modeling & Retail Location</strong></p>
+
+          <p>
+          The "Urban Simulation" project used the London Underground as a case study to assess network resilience under node failure scenarios using graph-based network analysis. Topological and weighted networks were analyzed with centrality measures (degree, closeness, betweenness) to identify critical transfer stations and simulate fragmentation by sequential node removal. Betweenness centrality proved most effective for revealing structural weaknesses.
+
+          In the second part, a weighted flow network based on NUMBAT OD data was used to compare two candidate supermarket locations via an unconstrained gravity model. The model incorporated population size, store area, and travel distance. Under a high-friction scenario (increased distance decay), Option 2 retained more local flows, suggesting greater accessibility resilience. This individual project combined spatial network science and interaction modeling, with strong implications for transport planning, network robustness evaluation, and data-informed retail site selection.
+          </p>
+
           <div class="btn-group">
             <a href="assets/simulation.pdf" target="_blank">View PDF</a>
             <a href="https://github.com/YULI61/website_Yi/blob/main/Urban Simulation" target="_blank" class="secondary-btn">GitHub</a>
@@ -109,10 +119,17 @@
       <div class="project-card" data-img="images/tourism.png">
         <div class="left">
           <img src="images/tourism.png" alt="Tourism Map">
-          <h3>Interactive Tourism Map</h3>
+          <h3>Good Trip in London</h3>
         </div>
         <div class="right">
-          <p>Designed a web map for major London attractions using HTML, CSS, and JavaScript, with city walk route generation based on user-selected categories.</p>
+          <p><strong>Urban Tourism Platform, Interactive Web Mapping, Route Optimization</strong></p>
+
+          <p>
+          The "Good Trip in London" project focuses on improving tourism experiences in central London by integrating data from VisitBritain, ALVA, and OpenStreetMap to build a categorized, semantically tagged POI database. It uses the Mapbox Optimization API to generate personalized walking routes based on user preferences. The platform includes multiple interactive modules such as animated particle maps, toggleable line charts, attraction heatmaps, and filtered route planners, supporting different travel modes and time ranges. The frontend is built with React and Mapbox GL JS, enabling real-time interaction and responsive design across devices. This was a group project; main responsibilities included website structure and interaction design, covering all modules except the UK map, statistical charts, and the custom route map.
+
+          (PC only)
+          </p>
+
           <div class="btn-group">
             <a href="https://yuli61.github.io/Group_visual/london-tourism-site/index.html" target="_blank">View Project</a>
           </div>
@@ -125,7 +142,14 @@
           <h3>London Attractions Map</h3>
         </div>
         <div class="right">
-          <p>Developed a responsive dashboard to visualize spatial and temporal changes in London housing prices using open-source datasets.</p>
+          <p><strong>Interactive Mapping, Spatial Clustering, Urban Data Visualization</strong></p>
+
+          <p>
+          The "London Attractions Map" is a web-based interactive map built with Mapbox GL JS, designed to explore the spatial distribution of tourist attractions across London. It integrates POI data from OpenStreetMap and enables real-time spatial analysis using the DBSCAN clustering algorithm. Users can adjust the epsilon (neighborhood radius) parameter to dynamically modify cluster sensitivity and uncover varying density patterns.
+
+          The interface offers multiple layers of interaction, including toggling between clustered and raw points, filtering by attraction category, zoom-based cluster refinement, and hover popups with contextual details. The design prioritizes clarity and responsiveness, making it an effective tool for uncovering spatial trends in urban tourism.
+          </p>
+
           <div class="btn-group">
             <a href="https://yuli61.github.io/website_Yi/Mapbox_final.html" target="_blank">View Project</a>
           </div>
@@ -149,7 +173,7 @@
         <ul class="contact-list">
           <li><strong>Email</strong><span><a href="mailto:sixandone115@gmail.com">sixandone115@gmail.com</a></span></li>
           <!-- <li><strong>LinkedIn</strong><span><a href="https://www.linkedin.com/in/your-link" target="_blank">linkedin.com/in/your-link</a></span></li> -->
-          <li><strong>GitHub</strong><span><a href="https://github.com/YULI61" target="_blank">github.com/your-name</a></span></li>
+          <li><strong>GitHub</strong><span><a href="https://github.com/YULI61" target="_blank">github.com/YULI61</a></span></li>
           <li><strong>Location</strong><span>London, UK</span></li>
         </ul>
       </div>
@@ -157,28 +181,37 @@
   </div>
 
   <!-- JS -->
-  <script>
-    function closeCardLightbox() {
-      document.getElementById('cardLightbox').style.display = 'none';
-    }
+<script>
+  function closeCardLightbox() {
+    document.getElementById('cardLightbox').style.display = 'none';
+  }
 
-    document.querySelectorAll('.project-card').forEach(card => {
-      card.addEventListener('click', () => {
-        const title = card.querySelector('h3')?.innerText || "";
-        const fullText = card.querySelector('p')?.innerText || "";
-        const linkHTML = card.querySelector('.btn-group')?.outerHTML || "";
-        const imgSrc = card.getAttribute("data-img");
+  document.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const title = card.querySelector('h3')?.innerText || "";
 
-        document.getElementById('cardContent').innerHTML = `
-          <h3 style="color:#2C3E50;margin-top:0;">${title}</h3>
-          <p style="margin:1rem 0;">${fullText}</p>
-          ${linkHTML}
-        `;
-        document.getElementById("lightboxImg").src = imgSrc;
-        document.getElementById('cardLightbox').style.display = 'flex';
-      });
+      const rightSection = card.querySelector('.right');
+      const paragraphs = rightSection?.querySelectorAll('p') || [];
+      const fullText = Array.from(paragraphs).map(p => p.outerHTML).join("");
+
+      const linkHTML = card.querySelector('.btn-group')?.outerHTML || "";
+      const imgSrc = card.getAttribute("data-img");
+
+      document.getElementById('cardContent').innerHTML = `
+        <h3 style="color:#2C3E50;margin-top:0;">${title}</h3>
+        ${fullText}
+        ${linkHTML}
+      `;
+      document.getElementById("lightboxImg").src = imgSrc;
+      document.getElementById('cardLightbox').style.display = 'flex';
     });
-  </script>
+  });
+
+  document.querySelector('.lightbox-content').addEventListener('click', function(event) {
+    event.stopPropagation();
+  });
+</script>
+
 
 </body>
 </html>
