@@ -5,134 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Good Trip in London</title>
 
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.css" />
+
   <link rel="stylesheet" href="assets/css/style.css" />
+
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Merriweather&display=swap" rel="stylesheet">
-
   <style>
     .fp-watermark {
       display: none !important;
     }
-
-/* 桌面端 iframe 全屏显示，避免滚动条 */
-.section iframe {
-  width: 100%;
-  height: 100vh;
-  border: 0;
-}
-
-/* 移动端下 iframe 比例锁定 */
-@media (max-width: 768px) {
-  .iframe-wrapper {
-    position: relative;
-    width: 100%;
-    padding-top: 56.25%; /* 16:9 */
-    overflow: hidden;
-  }
-
-  .iframe-wrapper iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
-
-  .section iframe {
-    height: 100% !important;
-  }
-}
-
-
-    #rotate-message {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.95);
-      z-index: 9999;
-      color: white;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 20px;
-      font-family: 'Merriweather', serif;
-    }
-
-    #rotate-message h2 {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
-    }
-
-    #rotate-message p {
-      font-size: 1.2rem;
-      max-width: 80%;
-      margin-bottom: 2rem;
-    }
-
-    .rotate-icon {
-      font-size: 4rem;
-      animation: rotate 2s infinite ease-in-out;
-    }
-
-    @keyframes rotate {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(90deg); }
-    }
-
-    @media (max-width: 768px) {
-      .home-title-main {
-        font-size: 1.8rem;
-      }
-
-      .home-explore-btn {
-        font-size: 1rem;
-        padding: 10px 20px;
-      }
-
-      .navbar {
-        font-size: 0.9rem;
-        height: 50px;
-      }
-
-      #menu li {
-        padding: 0 10px;
-      }
-
-      #menu li a {
-        font-size: 0.85rem;
-      }
-    }
-
-    @media (max-width: 768px) and (orientation: portrait) {
-      #rotate-message {
-        display: flex;
-      }
-
-      #fullpage, .section {
-        overflow: hidden;
-      }
-    }
-
-    @media (max-width: 768px) and (orientation: landscape) {
-      .section {
-        padding: 10px;
-      }
-
-      .navbar {
-        height: 50px;
-      }
-
-      #menu li {
-        font-size: 0.9rem;
-      }
-    }
   </style>
+
+
 </head>
 
 <body>
@@ -140,9 +26,9 @@
   <header class="navbar">
     <nav>
       <ul id="menu">
-        <li><a href="#home" class="nav-link">Home</a></li>
-        <li><a href="#intro" class="nav-link">Intro</a></li>
-        <li><a href="#background" class="nav-link">Background</a></li>
+        <li><a href="#home"class="nav-link">Home</a></li>
+        <li><a href="#intro"class="nav-link">Intro</a></li>
+        <li><a href="#background"class="nav-link">Background</a></li>
         <li class="nav-dropdown">
           <a href="#" class="nav-link">Attractions ▾</a>
           <ul class="dropdown-menu">
@@ -151,9 +37,10 @@
             <li><a href="#london-attraction" class="nav-link">London Isochrone Map</a></li>
           </ul>
         </li>
-        <li><a href="#personalised-trip" class="nav-link">Personalised Trip</a></li>
-        <li><a href="#conclusion" class="nav-link">Conclusion</a></li>
-        <li><a href="#team" class="nav-link">Recap & Team</a></li>
+
+        <li><a href="#personalised-trip"class="nav-link">Personalised Trip</a></li>
+        <li><a href="#conclusion"class="nav-link">Conclusion</a></li>
+        <li><a href="#team"class="nav-link">Recap & Team</a></li>
       </ul>
     </nav>
   </header>
@@ -161,164 +48,94 @@
   <!-- fullPage Sections -->
   <div id="fullpage">
     <div class="section" data-anchor="home">
-      <div class="iframe-wrapper">
-        <iframe src="https://yuli61.github.io/Group_visual/first_page/" frameborder="0"></iframe>
-      </div>
+      <iframe src="https://yuli61.github.io/Group_visual/first_page/" frameborder="0"></iframe>
       <div class="home-overlay">
         <h1 class="home-title-main">Good Trip in London<span class="handwriting"></span></h1>
+        <!-- <h2 class="home-subtitle">Discover culture, history, and hidden gems.</h2> -->
         <a href="#intro"><button class="home-explore-btn">Let's take off!</button></a>
+        
       </div>  
     </div>
     <div class="section" data-anchor="intro">
-      <div class="iframe-wrapper">
-        <iframe src="https://yuli61.github.io/Group_visual/fight_flow/index.html" frameborder="0"></iframe>
-      </div>
+      <iframe src="https://yuli61.github.io/Group_visual/fight_flow/index.html" frameborder="0"></iframe>
     </div>
     <div class="section" data-anchor="background">
-      <div class="iframe-wrapper">
-        <iframe src="https://yuli61.github.io/Group_visual/background/background.html" frameborder="0"></iframe>
-      </div>
+      <iframe src="https://yuli61.github.io/Group_visual/background/background.html" frameborder="0"></iframe>
     </div>
     <div class="section" data-anchor="uk-attraction">
-      <div class="iframe-wrapper">
-        <iframe src="https://yuli61.github.io/Group_visual/UK%20attraction/UK%20attraction.html" frameborder="0"></iframe>
-      </div>
+      <iframe src="https://yuli61.github.io/Group_visual/UK%20attraction/UK%20attraction.html" frameborder="0"></iframe>
     </div>
     <div class="section" data-anchor="chart-statistics">
-      <div class="iframe-wrapper">
-        <iframe src="https://yuli61.github.io/Group_visual/chart statistics/3charts.html" frameborder="0"></iframe>
-      </div>
+      <iframe src="https://yuli61.github.io/Group_visual/chart statistics/3charts.html" frameborder="0"></iframe>
     </div>
     <div class="section" data-anchor="london-attraction">
-      <div class="iframe-wrapper">
-        <iframe src="https://yuli61.github.io/Group_visual/15mins_zone/15mins_zone.html" frameborder="0"></iframe>
-      </div>
+      <iframe src="https://yuli61.github.io/Group_visual/15mins_zone/15mins_zone.html" frameborder="0"></iframe>
     </div>
     <div class="section" data-anchor="personalised-trip">
-      <div class="iframe-wrapper">
-        <iframe src="https://yuli61.github.io/Group_visual/london_travel_guidepage/interaction_travel_page.html" frameborder="0"></iframe>
-      </div>
+      <iframe src="https://yuli61.github.io/Group_visual/london_travel_guidepage/interaction_travel_page.html" frameborder="0"></iframe>
     </div>
     <div class="section" data-anchor="conclusion">
-      <div class="iframe-wrapper">
-        <iframe src="https://yuli61.github.io/Group_visual/conclusion/conclusion.html" frameborder="0"></iframe>
-      </div>
-    </div>
+      <iframe src="https://yuli61.github.io/Group_visual/conclusion/conclusion.html" frameborder="0"></iframe>
+    </div>    
     <div class="section" data-anchor="team">
-      <div class="iframe-wrapper">
-        <iframe src="team/index.html" frameborder="0"></iframe>
-      </div>
+      <iframe src="team/index.html" frameborder="0"></iframe>
     </div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.js"></script>
 
-  <div id="rotate-message">
-    <h2>For Best Experience</h2>
-    <p>Please rotate your device to landscape mode for the full experience</p>
-    <div class="rotate-icon">↻</div>
-    <p style="margin-top: 2rem; font-size: 1rem; opacity: 0.8;">
-      <a href="#" id="continue-portrait" style="color: #4FC3F7; text-decoration: underline;">Continue in portrait mode</a>
-    </p>
-  </div>
-
-  <script>
-    function initMobileLayout() {
-      const rotateMessage = document.getElementById('rotate-message');
-      const isMobile = window.innerWidth <= 768;
-
-      if (isMobile && window.innerHeight > window.innerWidth) {
-        rotateMessage.style.display = 'flex';
-
-        document.getElementById('continue-portrait').addEventListener('click', function(e) {
-          e.preventDefault();
-          rotateMessage.style.display = 'none';
-          enablePortraitMode();
-        });
-      } else {
-        rotateMessage.style.display = 'none';
-      }
-    }
-
-    function enablePortraitMode() {
-      if (typeof fullpage_api !== 'undefined') {
-        fullpage_api.destroy('all');
-      }
-
-      document.getElementById('fullpage').style.display = 'block';
-
-      document.querySelectorAll('.section').forEach(section => {
-        section.style.height = 'auto';
-        section.style.padding = '20px 0';
-
-        // 为每个 section 添加 id 供锚点跳转使用
-        const anchor = section.getAttribute('data-anchor');
-        if (anchor) {
-          section.setAttribute('id', anchor);
-        }
+<script>
+  // fullPage.js
+  var myFullpage = new fullpage('#fullpage', {
+    anchors: ['home', 'intro', 'background', 'uk-attraction', 'chart-statistics','london-attraction', 'personal-trip','conclusion', 'team'],
+    menu: '#menu',   
+    navigation: true,
+    navigationPosition: 'right',
+    navigationTooltips: [],
+    showActiveTooltip: false,
+    controlArrows: false,
+    autoScrolling: true,
+    scrollHorizontally: true,
+    afterLoad: function(origin, destination, direction) {
+      document.querySelectorAll('.section iframe').forEach((iframe) => {
+        iframe.style.pointerEvents = 'none';
       });
+
+      const currentSection = destination.item;
+      const currentIframe = currentSection.querySelector('iframe');
+      if (currentIframe) {
+        currentIframe.style.pointerEvents = 'auto';
+      }
 
       document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          const targetId = this.getAttribute('href').substring(1);
-          const target = document.getElementById(targetId);
-          if (target) {
-            target.scrollIntoView({ behavior: 'smooth' });
-          }
-        });
+        link.classList.remove('active');
       });
+      const currentAnchor = destination.anchor;
+      const activeLink = document.querySelector(`.nav-link[href="#${currentAnchor}"]`);
+      if (activeLink) activeLink.classList.add('active');
+
+      const lightSections = ['home','conclusion'];
+      const navbar = document.querySelector('.navbar');
+      if (lightSections.includes(currentAnchor)) {
+        navbar.classList.add('dark');
+      } else {
+        navbar.classList.remove('dark');
+      }
+
+      const nav = document.getElementById('fp-nav');
+      if (destination.anchor === 'home') {
+        nav.style.opacity = '0';
+        nav.style.pointerEvents = 'none';
+      } else {
+        nav.style.opacity = '1';
+        nav.style.pointerEvents = 'auto';
+      }
     }
+  });
 
-    window.addEventListener('load', initMobileLayout);
-    window.addEventListener('resize', initMobileLayout);
 
-    if (window.innerWidth > 768) {
-      var myFullpage = new fullpage('#fullpage', {
-        anchors: ['home', 'intro', 'background', 'uk-attraction', 'chart-statistics','london-attraction', 'personalised-trip','conclusion', 'team'],
-        menu: '#menu',
-        navigation: true,
-        navigationPosition: 'right',
-        controlArrows: false,
-        autoScrolling: true,
-        scrollHorizontally: true,
-        afterLoad: function(origin, destination, direction) {
-          document.querySelectorAll('.section iframe').forEach((iframe) => {
-            iframe.style.pointerEvents = 'none';
-          });
+</script>
 
-          const currentSection = destination.item;
-          const currentIframe = currentSection.querySelector('iframe');
-          if (currentIframe) {
-            currentIframe.style.pointerEvents = 'auto';
-          }
 
-          document.querySelectorAll('.nav-link').forEach(link => {
-            link.classList.remove('active');
-          });
-          const currentAnchor = destination.anchor;
-          const activeLink = document.querySelector(`.nav-link[href="#${currentAnchor}"]`);
-          if (activeLink) activeLink.classList.add('active');
-
-          const lightSections = ['home','conclusion'];
-          const navbar = document.querySelector('.navbar');
-          if (lightSections.includes(currentAnchor)) {
-            navbar.classList.add('dark');
-          } else {
-            navbar.classList.remove('dark');
-          }
-
-          const nav = document.getElementById('fp-nav');
-          if (destination.anchor === 'home') {
-            nav.style.opacity = '0';
-            nav.style.pointerEvents = 'none';
-          } else {
-            nav.style.opacity = '1';
-            nav.style.pointerEvents = 'auto';
-          }
-        }
-      });
-    }
-  </script>
 </body>
 </html>
