@@ -336,7 +336,8 @@ a {
 .hero-iframe-container {
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: auto;           /* ✅ 改这里 */
+  min-height: 100vh;
   overflow: hidden;
 }
 
@@ -348,29 +349,24 @@ a {
   height: 100%;
   border: none;
   z-index: 1;
-  pointer-events: none; /* 不阻挡滚动和点击 */
+  pointer-events: none; /* Prevent iframe from blocking scroll or clicks */
 }
 
 .hero-overlay-text {
-  position: absolute;
+  position: relative;
   z-index: 2;
   color: white;
   text-align: center;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 1rem;
-  max-width: 90%;
+  padding-top: 30vh;
+  font-family: 'Playfair Display', serif;
 }
 
 .hero-overlay-text h1 {
-  font-family: 'Dancing Script', cursive;
   font-size: 2.8rem;
-  font-weight: 600;
+  font-weight: bold;
   margin-bottom: 1rem;
   text-shadow: 0 2px 6px rgba(0,0,0,0.4);
 }
-
 
 .hero-overlay-text p {
   font-size: 1.1rem;
@@ -393,7 +389,6 @@ a {
   transform: translateY(-2px);
 }
 
-
 @media (max-width: 768px) {
   .hero-iframe-container {
     height: auto;
@@ -403,39 +398,4 @@ a {
   .hero-overlay-text {
     padding-top: 20vh;
   }
-}
-
-.fullscreen-iframe-wrapper {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  background: #000;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-}
-
-.fullscreen-iframe-wrapper iframe {
-  flex: 1;
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
-.iframe-header {
-  background: #111;
-  color: #fff;
-  padding: 0.5rem 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.9rem;
-}
-
-.iframe-header button {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: #fff;
-  cursor: pointer;
 }
