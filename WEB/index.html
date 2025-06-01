@@ -22,6 +22,7 @@
   </header>
 
 <!-- Hero - White Background Style -->
+<!-- Hero - White Background Style -->
 <section class="hero-iframe-container">
   <iframe 
     src="https://yuli61.github.io/Group_visual/first_page/" 
@@ -35,6 +36,7 @@
     <a href="#projects" class="btn-scroll">↓ Explore My Work</a>
   </div>
 </section>
+
 
 
 
@@ -127,11 +129,10 @@
           <p>
           The "Good Trip in London" project focuses on improving tourism experiences in central London by integrating data from VisitBritain, ALVA, and OpenStreetMap to build a categorized, semantically tagged POI database. It uses the Mapbox Optimization API to generate personalized walking routes based on user preferences. The platform includes multiple interactive modules such as animated particle maps, toggleable line charts, attraction heatmaps, and filtered route planners, supporting different travel modes and time ranges. The frontend is built with React and Mapbox GL JS, enabling real-time interaction and responsive design across devices. This was a group project; main responsibilities included website structure and interaction design, covering all modules except the UK map, statistical charts, and the custom route map.
 
-          (PC only)
           </p>
 
           <div class="btn-group">
-            <a href="https://yuli61.github.io/Group_visual/london-tourism-site/index.html" target="_blank">View Project</a>
+            <a href="javascript:void(0);" onclick="openFullscreenIframe('https://yuli61.github.io/Group_visual/london-tourism-site/index.html')">View Project</a>
           </div>
         </div>
       </div>
@@ -180,6 +181,15 @@
     </section>
   </div>
 
+  <!-- 全屏 iframe 弹窗 -->
+  <div id="fullscreenIframeWrapper" class="fullscreen-iframe-wrapper" style="display: none;">
+    <div class="iframe-header">
+      <span>Rotate your phone for best view 📱</span>
+      <button onclick="closeFullscreenIframe()">×</button>
+    </div>
+    <iframe id="fullscreenIframe" src="" frameborder="0"></iframe>
+  </div>
+
   <!-- JS -->
 <script>
   function closeCardLightbox() {
@@ -210,6 +220,23 @@
   document.querySelector('.lightbox-content').addEventListener('click', function(event) {
     event.stopPropagation();
   });
+
+  function openFullscreenIframe(url) {
+    const wrapper = document.getElementById("fullscreenIframeWrapper");
+    const iframe = document.getElementById("fullscreenIframe");
+    iframe.src = url;
+    wrapper.style.display = "flex";
+    document.body.style.overflow = "hidden"; // prevent scroll behind
+  }
+
+  function closeFullscreenIframe() {
+    const wrapper = document.getElementById("fullscreenIframeWrapper");
+    const iframe = document.getElementById("fullscreenIframe");
+    iframe.src = "";
+    wrapper.style.display = "none";
+    document.body.style.overflow = "";
+  }
+
 </script>
 
 
