@@ -319,15 +319,30 @@ a {
 
 /* 响应式 */
 @media (max-width: 700px) {
+  /* 新增网格布局调整 */
+  .project-grid {
+    grid-template-columns: 1fr; /* 改为单列布局 */
+    gap: 1.5rem; /* 调整间隙 */
+  }
+  
+  /* 确保卡片宽度100% */
   .project-card {
     flex-direction: column;
+    max-width: 100%; /* 添加最大宽度限制 */
+    margin: 0 auto; /* 居中显示 */
   }
-
+  
+  /* 可选：调整卡片内部元素间距 */
+  .project-card .left,
+  .project-card .right {
+    padding: 1rem;
+  }
+  
+  /* 保持原有联系人样式调整 */
   .contact-list li {
     flex-direction: column;
     align-items: flex-start;
   }
-
   .contact-list li span {
     margin-top: 0.3rem;
   }
